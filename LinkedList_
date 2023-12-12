@@ -48,6 +48,31 @@ public class CustomLinkedList {
         current.next = newNode;
     }
 
+     public void addAll(List<Integer> dataList) {
+        for (int data : dataList) {
+            addSorted(data);
+        }
+    }
+
+    // Helper method to add an element to the list while maintaining the sorted order
+    private void addSorted(int data) {
+        Node newNode = new Node(data);
+
+        if (head == null || head.data >= data) {
+            newNode.next = head;
+            head = newNode;
+            return;
+        }
+
+        Node current = head;
+        while (current.next != null && current.next.data < data) {
+            current = current.next;
+        }
+
+        newNode.next = current.next;
+        current.next = newNode;
+    }
+
     // Operation 3: remove(X) - Remove all occurrences of X from the list
     public void remove(int data) {
         Node current = head;

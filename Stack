@@ -1,0 +1,80 @@
+public class MaxStack {
+    private int maxSize;
+    private int top;
+    private int[] stack;
+    private int maxElement;
+
+    public MaxStack(int capacity) {
+        maxSize = capacity;
+        top = -1;
+        stack = new int[maxSize];
+    }
+
+    public void push(int x) {
+        if (top == maxSize - 1) {
+            System.out.println("Stack overflow. Cannot push element: " + x);
+            return;
+        }
+
+        if (top == -1 || x > maxElement) {
+            maxElement = x;
+        }
+
+        top++;
+        stack[top] = x;
+    }
+
+    public void pop() {
+        if (top == -1) {
+            System.out.println("Stack underflow. Cannot pop from an empty stack.");
+            return;
+        }
+
+        if (stack[top] == maxElement && top > 0) {
+            // Recalculate maxElement if the top element is the current max
+            maxElement = stack[top - 1];
+            for (int i = 0; i <= top - 1; i++) {
+                if (stack[i] > maxElement) {
+                    maxElement = stack[i];
+                }
+            }
+        }
+
+        top--;
+    }
+
+    public int top() {
+        if (top == -1) {
+            System.out.println("Stack is empty. No top element.");
+            return -1; // You can choose a different value to represent an empty stack
+        }
+
+        return stack[top];
+    }
+
+    public int getMax() {
+        if (top == -1) {
+            System.out.println("Stack is empty. No maximum element.");
+            return -1; // You can choose a different value to represent an empty stack
+        }
+
+        return maxElement;
+    }
+
+    public static void main(String[] args) {
+        MaxStack stack = new MaxStack(5);
+        stack.push(3);
+        stack.push(5);
+        stack.push(2);
+        stack.push(7);
+
+        System.out.println("Top element: " + stack.top());
+        System.out.println("Maximum element: " + stack.getMax());
+
+        stack.pop();
+        stack.pop();
+
+        System.out.println("Top element after pop: " + stack.top());
+        System.out.println("Maximum element after pop: " + stack.getMax());
+    }
+}

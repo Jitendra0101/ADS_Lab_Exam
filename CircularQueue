@@ -1,0 +1,101 @@
+public class CircularQueue implements ICircularQueue {
+    private static final int DEFAULT_CAPACITY = 10;
+
+    private String[] elements;
+    private int front;
+    private int rear;
+    private int size;
+
+    public CircularQueue() {
+        this(DEFAULT_CAPACITY);
+    }
+
+    public CircularQueue(int capacity) {
+        elements = new String[capacity];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    @Override
+    public boolean add(String element) {
+        if (isFull()) {
+            return false;
+        }
+
+        rear = (rear + 1) % elements.length;
+        elements[rear] = element;
+        size++;
+        return true;
+    }
+
+    @Override
+    public String remove() {
+        if (isEmpty()) {
+            return null;
+        }
+
+        String removedElement = elements[front];
+        front = (front + 1) % elements.length;
+        size--;
+        return removedElement;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+        int count = 0;
+        int index = front;
+        while (count < size) {
+            result.append(elements[index]);
+            if (count < size - 1) {
+                result.append(", ");
+            }
+            index = (index + 1) % elements.length;
+            count++;
+        }
+
+        return result.toString();
+    }
+
+    private boolean isFull() {
+        return size == elements.length;
+    }
+
+    private boolean isEmpty() {
+        return size == 0;
+    }
+
+    public static void main(String[] args) {
+        ICircularQueue circularQueue = new CircularQueue();
+
+        // Test add
+        for (int i = 0; i < 5; i++) {
+            circularQueue.add(String.valueOf(i));
+        }
+
+        // Test toString
+        System.out.println("Queue elements: " + circularQueue.toString());
+
+        // Test remove
+        System.out.println("Removed element: " + circularQueue.remove());
+
+        // Test size
+        System.out.println("Queue size: " + circularQueue.size());
+
+        // Test add to full queue
+        circularQueue.add("5");
+
+        // Test toString after adding to full queue
+        System.out.println("Queue elements: " + circularQueue.toString());
+    }
+}
